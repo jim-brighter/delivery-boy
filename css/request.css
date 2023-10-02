@@ -43,7 +43,7 @@
     grid-column-end: 11;
     grid-row-start: 3;
     grid-row-end: 11;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 #headers-editor>table {
@@ -55,8 +55,12 @@
     border-collapse: collapse;
 }
 
+#headers-table td, #headers-table th {
+    width: 50%;
+}
+
 .header-input {
-    width: 100%;
+    width: 99%;
     height: 100%;
     padding: 0.2rem;
     border: none;
