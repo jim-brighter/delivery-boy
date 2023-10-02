@@ -1,10 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require ('electron');
 const path = require('node:path');
 
-const createWindow = () => {
+const SCALE = 0.8;
+
+const createWindow = (width, height) => {
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: Math.floor(SCALE * width),
+        height: Math.floor(SCALE * height),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -16,11 +18,14 @@ const createWindow = () => {
 app.whenReady().then(() => {
     ipcMain.handle('ping', () => 'pong');
 
-    createWindow();
+    const { screen } = require('electron');
+    const primaryDisplay = screen.getPrimaryDisplay();
+
+    createWindow(primaryDisplay.workAreaSize.width, primaryDisplay.workAreaSize.height);
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+            createWindow(primaryDisplay.workAreaSize.width, primaryDisplay.workAreaSize.height);
         }
     });
 });

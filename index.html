@@ -2,20 +2,33 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <meta
+        <!-- <meta
             http-equiv="Content-Security-Policy"
             content="default-src 'self'; script-src 'self'"
         />
         <meta
             http-equiv="X-Content-Security-Policy"
             content="default-src 'self'; script-src 'self'"
-        />
-        <title>Hello from Electron</title>
+        /> -->
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/request.css">
+        <link rel="stylesheet" type="text/css" href="css/response.css">
+        <title>Delivery Boy</title>
     </head>
     <body>
-        <h1>Hello from Electron</h1>
-        <p>👋</p>
-        <p id="info"></p>
+        <div id="sidebar">
+            <h3>TODO: saved requests go here</h3>
+        </div>
+        <div id="request-editor">
+            <select name="method" id="method">
+                <option value="GET">GET</option>
+            </select>
+            <input id="url" type="text" placeholder="http://github.com/jim-brighter/delivery-boy" autocomplete="off">
+            <button type="button" id="send">Send</button>
+        </div>
+        <div id="response">
+            <pre id="response-body"></pre>
+        </div>
     </body>
     <script src="./renderer.js"></script>
 </html>

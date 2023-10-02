@@ -1,9 +1,16 @@
-const information = document.getElementById('info');
-information.innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`;
+const sendRequest = async () => {
+    const method = document.getElementById('method').value;
+    const url = document.getElementById('url').value;
 
-const func = async () => {
-    const response = await window.versions.ping();
-    console.log(response);
+    const responseArea = document.getElementById('response-body');
+
+    const response = await fetch(url, {
+        method
+    });
+
+    const data = await response.json();
+
+    responseArea.innerText = JSON.stringify(data, null, 2);
 }
 
-func();
+document.getElementById('send').onclick = sendRequest;
