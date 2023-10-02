@@ -1,3 +1,21 @@
+const requestMethods = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'PATCH',
+    'OPTIONS',
+    'HEAD'
+];
+
+const methods = document.getElementById('method');
+requestMethods.forEach((requestMethod) => {
+    const methodElement = document.createElement('option');
+    methodElement.value = requestMethod;
+    methodElement.innerText = requestMethod;
+    methods.appendChild(methodElement);
+});
+
 const sendRequest = async () => {
     const method = document.getElementById('method').value;
     const url = document.getElementById('url').value;
