@@ -16,6 +16,19 @@ requestMethods.forEach((requestMethod) => {
     methods.appendChild(methodElement);
 });
 
+const loadRequest = async () => {
+    const savedRequest = await window.electronAPI.loadRequest('default');
+    if (savedRequest) {
+        for (let [key, value] of Object.entries(savedRequest.headers)) {
+            newHeader(key, value);
+        }
+        document.getElementById('url').value = savedRequest.url;
+        document.getElementById('method').value = savedRequest.method;
+    }
+}
+
+loadRequest();
+
 const sendRequest = async () => {
     const method = document.getElementById('method').value;
     const url = document.getElementById('url').value;
@@ -36,6 +49,12 @@ const sendRequest = async () => {
 
     const responseArea = document.getElementById('response-body');
 
+    await window.electronAPI.saveRequest('default', {
+        url,
+        method,
+        headers
+    });
+
     const response = await fetch(url, {
         method,
         headers
@@ -52,7 +71,7 @@ const changeDetails = (event) => {
     });
 }
 
-const newHeader = () => {
+const newHeader = (storedHeader, storedValue) => {
     const headerTable = document.getElementById('headers-table');
     const headerTableBody = headerTable.getElementsByTagName('tbody')[0];
 
@@ -65,12 +84,18 @@ const newHeader = () => {
     headerColInput.type = 'text';
     headerColInput.autocomplete = 'off';
     headerColInput.placeholder = 'Content-Type';
+    if (storedHeader) {
+        headerColInput.value = storedHeader;
+    }
 
     const headerValInput = document.createElement('input');
     headerValInput.classList.add('header-input');
     headerValInput.type = 'text';
     headerValInput.autocomplete = 'off';
     headerValInput.placeholder = 'application/json';
+    if (storedValue) {
+        headerValInput.value = storedValue;
+    }
 
     headerCol.appendChild(headerColInput);
     headerVal.appendChild(headerValInput);

@@ -1,7 +1,14 @@
 const { app, BrowserWindow, ipcMain } = require ('electron');
 const path = require('node:path');
+const fs = require('node:fs');
 
 const SCALE = 0.8;
+const AUTOSAVE_INTERVAL = 5000; // 5 seconds
+
+let interval;
+
+const requestsFilePath = path.join(app.getPath('userData'), 'requests.json');
+let requestsData = {};
 
 const createWindow = (width, height) => {
     const win = new BrowserWindow({
@@ -15,23 +22,66 @@ const createWindow = (width, height) => {
     win.loadFile('index.html');
 }
 
+const readRequestsData = () => {
+    try {
+        requestsData = JSON.parse(fs.readFileSync(requestsFilePath));
+    } catch(error) {
+        console.log('No request data loaded');
+    }
+}
+
+const writeRequestsData = () => {
+    try {
+        fs.writeFileSync(requestsFilePath, JSON.stringify(requestsData));
+    } catch(error) {
+        console.error('Failed to save requests data to disk');
+    }
+}
+
 app.whenReady().then(() => {
-    ipcMain.handle('ping', () => 'pong');
+
+    readRequestsData();
+
+    ipcMain.handle('saveRequest', (event, key, request) => {
+        requestsData[key] = request;
+    });
+
+    ipcMain.handle('loadRequest', (event, key) => {
+        return requestsData[key];
+    })
 
     const { screen } = require('electron');
     const primaryDisplay = screen.getPrimaryDisplay();
 
+    interval = setInterval(writeRequestsData, AUTOSAVE_INTERVAL);
     createWindow(primaryDisplay.workAreaSize.width, primaryDisplay.workAreaSize.height);
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
+            interval = setInterval(writeRequestsData, AUTOSAVE_INTERVAL);
             createWindow(primaryDisplay.workAreaSize.width, primaryDisplay.workAreaSize.height);
         }
     });
 });
 
+const cleanup = () => {
+    writeRequestsData();
+
+    clearInterval(interval);
+}
+
 app.on('window-all-closed', () => {
+
+    cleanup();
+
     if (process.platform !== 'darwin') {
         app.quit();
     }
+});
+
+app.on('will-quit', () => {
+
+    cleanup();
+
+    app.quit();
 });
