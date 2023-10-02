@@ -2,12 +2,6 @@
     font-style: italic;
 }
 
-#url {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    padding-left: 0.5rem;
-}
-
 #method {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -15,9 +9,59 @@
     grid-row-end: 2;
 }
 
-#send {
-    grid-column-start: 3;
-    grid-column-end: 4;
+#url {
+    grid-column-start: 2;
+    grid-column-end: 10;
     grid-row-start: 1;
     grid-row-end: 2;
+    padding-left: 0.5rem;
+}
+
+#send {
+    grid-column-start: 10;
+    grid-column-end: 11;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#headers {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#query-params {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.request-details-editor {
+    grid-column-start: 1;
+    grid-column-end: 11;
+    grid-row-start: 3;
+    grid-row-end: 11;
+    overflow: scroll;
+}
+
+#headers-editor>table {
+    width: 100%;
+}
+
+#headers-table, #headers-table td, #headers-table th {
+    border: 1px solid lightgray;
+    border-collapse: collapse;
+}
+
+.header-input {
+    width: 100%;
+    height: 100%;
+    padding: 0.2rem;
+    border: none;
+}
+
+#new-header {
+    padding: 0.2rem;
 }

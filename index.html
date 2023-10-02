@@ -22,7 +22,25 @@
         <div id="request-editor">
             <select name="method" id="method"></select>
             <input id="url" type="text" placeholder="http://github.com/jim-brighter/delivery-boy" autocomplete="off">
-            <button type="button" id="send">Send</button>
+            <button type="button" id="send" onclick="sendRequest()">Send</button>
+            <button type="button" id="headers" onclick="changeDetails(event)">Headers</button>
+            <button type="button" id="query-params" onclick="changeDetails(event)">Query Params</button>
+            <div class="request-details-editor" id="headers-editor">
+                <table id="headers-table">
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button type="button" id="new-header" onclick="newHeader()">New Header</button>
+            </div>
+            <div class="request-details-editor" id="query-params-editor" hidden>
+                TODO: query params
+            </div>
         </div>
         <div id="response">
             <pre id="response-body"></pre>

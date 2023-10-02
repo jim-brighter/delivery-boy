@@ -22,6 +22,22 @@ body {
     grid-template-rows: repeat(5, 20%);
 }
 
+button {
+    border: 1px solid gray;
+    border-collapse: collapse;
+    cursor: pointer;
+}
+
+input {
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+
+select {
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+
 #sidebar {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -39,8 +55,8 @@ body {
     border: 1px solid gray;
     border-collapse: collapse;
     display: grid;
-    grid-template-columns: 10% 80% 10%;
-    grid-template-rows: 10% 10% 90%;
+    grid-template-columns: repeat(10, 10%);
+    grid-template-rows: repeat(10, 10%);
 }
 
 #response {
