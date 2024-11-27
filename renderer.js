@@ -16,17 +16,33 @@ requestMethods.forEach((requestMethod) => {
     methods.appendChild(methodElement);
 });
 
-const loadRequest = async () => {
-    const savedRequest = await window.electronAPI.loadRequest('default');
+const loadAllRequests = async () => {
+    const allRequests = await window.electronAPI.loadAllRequests();
+    if (allRequests) {
+        for (let key in allRequests) {
+            const listItem = document.createElement('li');
+            listItem.textContent = key;
+            document.getElementById('saved-requests').appendChild(listItem);
+        }
+    }
+}
+
+const loadRequest = async (key = 'default') => {
+    const savedRequest = await window.electronAPI.loadRequest(key);
     if (savedRequest) {
         for (let [key, value] of Object.entries(savedRequest.headers)) {
-            newHeader(key, value);
+            newHeader(null, key, value);
         }
         document.getElementById('url').value = savedRequest.url;
         document.getElementById('method').value = savedRequest.method;
     }
+
+    Array.prototype.forEach.call(document.getElementsByClassName('delete-header'), (b) => {
+        b.addEventListener('click', deleteHeader);
+    });
 }
 
+loadAllRequests();
 loadRequest();
 
 const sendRequest = async () => {
@@ -48,6 +64,7 @@ const sendRequest = async () => {
     }
 
     const responseArea = document.getElementById('response-body');
+    const responseCode = document.getElementById('response-code');
 
     await window.electronAPI.saveRequest('default', {
         url,
@@ -55,14 +72,30 @@ const sendRequest = async () => {
         headers
     });
 
-    const response = await fetch(url, {
-        method,
-        headers
-    });
+    try {
+        const response = await fetch(url, {
+            method,
+            headers
+        });
 
-    const data = await response.json();
+        const status = response.status;
 
-    responseArea.innerText = JSON.stringify(data, null, 2);
+        responseCode.innerText = status;
+
+        responseCode.className = '';
+
+        if (status < 400) {
+            responseCode.classList.add('status-ok');
+        } else {
+            responseCode.classList.add('status-bad');
+        }
+
+        const data = await response.json();
+
+        responseArea.innerText = JSON.stringify(data, null, 2);
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 const changeDetails = (event) => {
@@ -71,13 +104,19 @@ const changeDetails = (event) => {
     });
 }
 
-const newHeader = (storedHeader, storedValue) => {
+const deleteHeader = (event) => {
+    const tBody = document.getElementById('headers-table').getElementsByTagName('tbody')[0];
+    tBody.removeChild(event.target.parentNode.parentNode);
+}
+
+const newHeader = (event, storedHeader, storedValue) => {
     const headerTable = document.getElementById('headers-table');
     const headerTableBody = headerTable.getElementsByTagName('tbody')[0];
 
     const row = document.createElement('tr');
     const headerCol = document.createElement('td');
     const headerVal = document.createElement('td');
+    const headerDelete = document.createElement('td');
 
     const headerColInput = document.createElement('input');
     headerColInput.classList.add('header-input');
@@ -97,10 +136,25 @@ const newHeader = (storedHeader, storedValue) => {
         headerValInput.value = storedValue;
     }
 
+    const deleteLink = document.createElement('button');
+    deleteLink.classList.add('no-style-button', 'delete-header');
+    deleteLink.textContent = '🗑️';
+
+    deleteLink.addEventListener('click', deleteHeader);
+
+    headerDelete.classList.add('header-delete');
+    headerDelete.appendChild(deleteLink);
+
     headerCol.appendChild(headerColInput);
     headerVal.appendChild(headerValInput);
     row.appendChild(headerCol);
     row.appendChild(headerVal);
+    row.appendChild(headerDelete);
 
     headerTableBody.appendChild(row);
 }
+
+document.getElementById('send').addEventListener('click', sendRequest);
+document.getElementById('headers').addEventListener('click', changeDetails);
+document.getElementById('query-params').addEventListener('click', changeDetails);
+document.getElementById('new-header').addEventListener('click', newHeader);

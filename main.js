@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require ('electron');
+const { app, BrowserWindow, ipcMain, session } = require ('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 
@@ -40,6 +40,15 @@ const writeRequestsData = () => {
 
 app.whenReady().then(() => {
 
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+        callback({
+            responseHeaders: {
+            ...details.responseHeaders,
+            'Content-Security-Policy': ['connect-src http:', 'script-src \'self\'']
+            }
+        })
+    })
+
     readRequestsData();
 
     ipcMain.handle('saveRequest', (event, key, request) => {
@@ -48,6 +57,10 @@ app.whenReady().then(() => {
 
     ipcMain.handle('loadRequest', (event, key) => {
         return requestsData[key];
+    })
+
+    ipcMain.handle('loadAllRequests', (event) => {
+        return requestsData;
     })
 
     const { screen } = require('electron');

@@ -55,15 +55,14 @@
     border-collapse: collapse;
 }
 
-#headers-table td, #headers-table th {
-    width: 50%;
+.header-delete {
+    text-align: center;
 }
 
 .header-input {
     width: 99%;
     height: 100%;
     padding: 0.2rem;
-    border: none;
 }
 
 #new-header {

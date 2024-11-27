@@ -2,8 +2,6 @@
     :root {
         color-scheme: dark;
     }
-
-    /* TODO: better dark mode support */
 }
 
 * {
@@ -45,6 +43,7 @@ select {
     grid-row-end: 6;
     border: 1px solid gray;
     border-collapse: collapse;
+    padding: 0.5rem;
 }
 
 #request-editor {
@@ -66,4 +65,17 @@ select {
     grid-row-end: 6;
     border: 1px solid gray;
     border-collapse: collapse;
+}
+
+.pb-1 {
+    padding-bottom: 1rem;
+}
+
+.unstyled-list {
+    list-style-type: none;
+}
+
+.no-style-button {
+    border: none;
+    background: none;
 }

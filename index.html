@@ -2,14 +2,6 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <!-- <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'"
-        />
-        <meta
-            http-equiv="X-Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'"
-        /> -->
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="stylesheet" type="text/css" href="css/request.css">
         <link rel="stylesheet" type="text/css" href="css/response.css">
@@ -17,14 +9,16 @@
     </head>
     <body>
         <div id="sidebar">
-            <h3>TODO: saved requests go here</h3>
+            <h3 class="pb-1">Saved Requests</h3>
+            <ul class="unstyled-list" id="saved-requests">
+            </ul>
         </div>
         <div id="request-editor">
             <select name="method" id="method"></select>
             <input id="url" type="text" placeholder="http://github.com/jim-brighter/delivery-boy" autocomplete="off">
-            <button type="button" id="send" onclick="sendRequest()">Send</button>
-            <button type="button" id="headers" onclick="changeDetails(event)">Headers</button>
-            <button type="button" id="query-params" onclick="changeDetails(event)">Query Params</button>
+            <button type="button" id="send">Send</button>
+            <button type="button" id="headers">Headers</button>
+            <button type="button" id="query-params">Query Params</button>
             <div class="request-details-editor" id="headers-editor">
                 <table id="headers-table">
                     <thead>
@@ -36,13 +30,14 @@
                     <tbody>
                     </tbody>
                 </table>
-                <button type="button" id="new-header" onclick="newHeader()">New Header</button>
+                <button type="button" id="new-header">New Header</button>
             </div>
             <div class="request-details-editor" id="query-params-editor" hidden>
                 TODO: query params
             </div>
         </div>
         <div id="response">
+            <div id="response-code"></div>
             <pre id="response-body"></pre>
         </div>
     </body>

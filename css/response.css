@@ -1,4 +1,51 @@
-#response, #response-body {
-    font-family: 'SF Mono', 'Cascadia Mono', monospace;
+#response {
+    display: grid;
+    grid-template-columns: repeat(20, 5%);
+    grid-template-rows: repeat(20, 5%);
+}
+
+#response-code {
+    grid-column-start: 1;
+    grid-column-end: 21;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#response-body {
+    grid-column-start: 1;
+    grid-column-end: 21;
+    grid-row-start: 2;
+    grid-row-end: 21;
     overflow: scroll;
+    font-size: small;
+}
+
+#response-code, #response-body {
+    padding: 0.5rem;
+    font-family: 'SF Mono', 'Cascadia Mono', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    .status-ok {
+        color: lime;
+    }
+
+    .status-bad {
+        color: red;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .status-ok {
+        color: green;
+    }
+
+    .status-bad {
+        color: crimson;
+    }
+}
+
+.status-ok, .status-bad {
+    font-weight: bold;
+
 }
