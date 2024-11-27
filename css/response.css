@@ -22,7 +22,7 @@
 
 #response-code, #response-body {
     padding: 0.5rem;
-    font-family: 'SF Mono', 'Cascadia Mono', monospace;
+    font-family: 'SF Mono', 'Cascadia Mono', 'Menlo', 'Consolas', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
