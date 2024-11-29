@@ -20,10 +20,6 @@ const loadRequest = async (key = 'default') => {
       document.getElementById('url').value = savedRequest.url;
       document.getElementById('method').value = savedRequest.method;
   }
-
-  Array.prototype.forEach.call(document.getElementsByClassName('delete-header'), (b) => {
-      b.addEventListener('click', listeners.deleteHeader);
-  });
 }
 
 export {
