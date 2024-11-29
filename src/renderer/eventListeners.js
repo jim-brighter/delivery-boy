@@ -61,15 +61,8 @@ const deleteHeader = (event) => {
     tBody.removeChild(event.target.parentNode.parentNode);
 };
 
-const newHeader = (event, storedHeader, storedValue) => {
-    const headerTable = document.getElementById('headers-table');
-    const headerTableBody = headerTable.getElementsByTagName('tbody')[0];
-
-    const row = document.createElement('tr');
+const createHeader = (storedHeader) => {
     const headerCol = document.createElement('td');
-    const headerVal = document.createElement('td');
-    const headerDelete = document.createElement('td');
-
     const headerColInput = document.createElement('input');
     headerColInput.classList.add('header-input');
     headerColInput.type = 'text';
@@ -78,7 +71,13 @@ const newHeader = (event, storedHeader, storedValue) => {
     if (storedHeader) {
         headerColInput.value = storedHeader;
     }
+    headerCol.appendChild(headerColInput);
 
+    return headerCol;
+}
+
+const createHeaderValue = (storedValue) => {
+    const headerVal = document.createElement('td');
     const headerValInput = document.createElement('input');
     headerValInput.classList.add('header-input');
     headerValInput.type = 'text';
@@ -87,22 +86,43 @@ const newHeader = (event, storedHeader, storedValue) => {
     if (storedValue) {
         headerValInput.value = storedValue;
     }
+    headerVal.appendChild(headerValInput);
 
+    return headerVal;
+}
+
+const createHeaderDeleteButton = () => {
+    const headerDelete = document.createElement('td');
     const deleteLink = document.createElement('button');
     deleteLink.classList.add('no-style-button', 'delete-header');
     deleteLink.title = 'Delete Header';
     deleteLink.textContent = '🗑️';
-
     deleteLink.addEventListener('click', deleteHeader);
-
     headerDelete.classList.add('header-delete');
     headerDelete.appendChild(deleteLink);
+    return headerDelete;
+}
 
-    headerCol.appendChild(headerColInput);
-    headerVal.appendChild(headerValInput);
+const createHeaderRow = (headerCol, headerVal, headerDelete) => {
+    const row = document.createElement('tr');
     row.appendChild(headerCol);
     row.appendChild(headerVal);
     row.appendChild(headerDelete);
+
+    return row;
+}
+
+const newHeader = (event, storedHeader, storedValue) => {
+    const headerTable = document.getElementById('headers-table');
+    const headerTableBody = headerTable.getElementsByTagName('tbody')[0];
+
+    const headerCol = createHeader(storedHeader);
+
+    const headerVal = createHeaderValue(storedValue);
+
+    const headerDelete = createHeaderDeleteButton();
+
+    const row = createHeaderRow(headerCol, headerVal, headerDelete);
 
     headerTableBody.appendChild(row);
 };
