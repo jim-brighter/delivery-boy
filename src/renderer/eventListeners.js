@@ -1,50 +1,3 @@
-const requestMethods = [
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'PATCH',
-    'OPTIONS',
-    'HEAD'
-];
-
-const methods = document.getElementById('method');
-requestMethods.forEach((requestMethod) => {
-    const methodElement = document.createElement('option');
-    methodElement.value = requestMethod;
-    methodElement.innerText = requestMethod;
-    methods.appendChild(methodElement);
-});
-
-const loadAllRequests = async () => {
-    const allRequests = await window.electronAPI.loadAllRequests();
-    if (allRequests) {
-        for (let key in allRequests) {
-            const listItem = document.createElement('li');
-            listItem.textContent = key;
-            document.getElementById('saved-requests').appendChild(listItem);
-        }
-    }
-}
-
-const loadRequest = async (key = 'default') => {
-    const savedRequest = await window.electronAPI.loadRequest(key);
-    if (savedRequest) {
-        for (let [key, value] of Object.entries(savedRequest.headers)) {
-            newHeader(null, key, value);
-        }
-        document.getElementById('url').value = savedRequest.url;
-        document.getElementById('method').value = savedRequest.method;
-    }
-
-    Array.prototype.forEach.call(document.getElementsByClassName('delete-header'), (b) => {
-        b.addEventListener('click', deleteHeader);
-    });
-}
-
-loadAllRequests();
-loadRequest();
-
 const sendRequest = async () => {
     const method = document.getElementById('method').value;
     const url = document.getElementById('url').value;
@@ -104,18 +57,18 @@ const sendRequest = async () => {
     } catch (e) {
         console.error(e);
     }
-}
+};
 
 const changeDetails = (event) => {
     document.querySelectorAll('.request-details-editor').forEach((element) => {
         element.hidden = element.id !== `${event.target.id}-editor`;
     });
-}
+};
 
 const deleteHeader = (event) => {
     const tBody = document.getElementById('headers-table').getElementsByTagName('tbody')[0];
     tBody.removeChild(event.target.parentNode.parentNode);
-}
+};
 
 const newHeader = (event, storedHeader, storedValue) => {
     const headerTable = document.getElementById('headers-table');
@@ -160,9 +113,11 @@ const newHeader = (event, storedHeader, storedValue) => {
     row.appendChild(headerDelete);
 
     headerTableBody.appendChild(row);
-}
+};
 
-document.getElementById('send').addEventListener('click', sendRequest);
-document.getElementById('headers').addEventListener('click', changeDetails);
-document.getElementById('query-params').addEventListener('click', changeDetails);
-document.getElementById('new-header').addEventListener('click', newHeader);
+export {
+    newHeader,
+    deleteHeader,
+    changeDetails,
+    sendRequest
+}
