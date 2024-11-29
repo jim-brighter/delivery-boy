@@ -1,7 +1,4 @@
-const sendRequest = async () => {
-    const method = document.getElementById('method').value;
-    const url = document.getElementById('url').value;
-
+const getHeaders = () => {
     const headerTable = document.getElementById('headers-table');
     const headerTableBody = headerTable.getElementsByTagName('tbody')[0];
     const headerTableRows = headerTableBody.getElementsByTagName('tr');
@@ -16,8 +13,42 @@ const sendRequest = async () => {
         headers[headerName] = headerVal;
     }
 
+    return headers;
+}
+
+const setLoading = (loading) => {
+    document.getElementById('response-code').hidden = loading;
+    document.getElementById('response-body').hidden = loading;
+    document.getElementById('response-spinner').hidden = !loading;
+}
+
+const handleResponse = async (response) => {
     const responseArea = document.getElementById('response-body');
     const responseCode = document.getElementById('response-code');
+
+    const status = response.status;
+
+    responseCode.innerText = status;
+
+    responseCode.className = '';
+
+    if (status < 400) {
+        responseCode.classList.add('status-ok');
+    } else {
+        responseCode.classList.add('status-bad');
+    }
+
+    const data = await response.json();
+
+    responseArea.innerText = JSON.stringify(data, null, 2);
+}
+
+
+const sendRequest = async () => {
+    const method = document.getElementById('method').value;
+    const url = document.getElementById('url').value;
+
+    const headers = getHeaders();
 
     await window.electronAPI.saveRequest('default', {
         url,
@@ -26,34 +57,16 @@ const sendRequest = async () => {
     });
 
     try {
-        document.getElementById('response-code').hidden = true;
-        document.getElementById('response-body').hidden = true;
-        document.getElementById('response-spinner').hidden = false;
+        setLoading(true);
 
         const response = await fetch(url, {
             method,
             headers
         });
 
-        document.getElementById('response-spinner').hidden = true;
-        document.getElementById('response-code').hidden = false;
-        document.getElementById('response-body').hidden = false;
+        setLoading(false);
 
-        const status = response.status;
-
-        responseCode.innerText = status;
-
-        responseCode.className = '';
-
-        if (status < 400) {
-            responseCode.classList.add('status-ok');
-        } else {
-            responseCode.classList.add('status-bad');
-        }
-
-        const data = await response.json();
-
-        responseArea.innerText = JSON.stringify(data, null, 2);
+        await handleResponse(response);
     } catch (e) {
         console.error(e);
     }

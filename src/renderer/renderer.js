@@ -2,6 +2,13 @@ import { REQUEST_METHODS } from './constants.js';
 import * as listeners from './eventListeners.js';
 import { loadAllRequests, loadRequest } from './loadRequests.js';
 
+const addListeners = () => {
+    document.getElementById('send').addEventListener('click', listeners.sendRequest);
+    document.getElementById('headers').addEventListener('click', listeners.changeDetails);
+    document.getElementById('query-params').addEventListener('click', listeners.changeDetails);
+    document.getElementById('new-header').addEventListener('click', listeners.newHeader);
+}
+
 const init = () => {
     const methods = document.getElementById('method');
     REQUEST_METHODS.forEach((requestMethod) => {
@@ -14,10 +21,7 @@ const init = () => {
     loadAllRequests();
     loadRequest();
 
-    document.getElementById('send').addEventListener('click', listeners.sendRequest);
-    document.getElementById('headers').addEventListener('click', listeners.changeDetails);
-    document.getElementById('query-params').addEventListener('click', listeners.changeDetails);
-    document.getElementById('new-header').addEventListener('click', listeners.newHeader);
+    addListeners();
 }
 
 init();
