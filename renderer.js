@@ -73,10 +73,18 @@ const sendRequest = async () => {
     });
 
     try {
+        document.getElementById('response-code').hidden = true;
+        document.getElementById('response-body').hidden = true;
+        document.getElementById('response-spinner').hidden = false;
+
         const response = await fetch(url, {
             method,
             headers
         });
+
+        document.getElementById('response-spinner').hidden = true;
+        document.getElementById('response-code').hidden = false;
+        document.getElementById('response-body').hidden = false;
 
         const status = response.status;
 

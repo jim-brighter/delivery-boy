@@ -51,7 +51,8 @@
 }
 
 #headers-table, #headers-table td, #headers-table th {
-    border: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
     border-collapse: collapse;
 }
 
@@ -63,6 +64,7 @@
     width: 99%;
     height: 100%;
     padding: 0.2rem;
+    border: none;
 }
 
 #new-header {
